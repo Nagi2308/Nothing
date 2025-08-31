@@ -1,68 +1,199 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>KnightsXBots ⚔️ Portal</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Cinzel", serif;
-      background: linear-gradient(135deg, #0a0a0a, #1e1e1e);
-      color: #f5f5f5;
-      text-align: center;
-    }
-    header {
-      padding: 20px;
-      font-size: 2rem;
-      font-weight: bold;
-      color: #ffcc00;
-      text-shadow: 2px 2px 5px black;
-    }
-    .container {
-      margin-top: 50px;
-      padding: 20px;
-    }
-    .video-card {
-      border: 2px solid #ffcc00;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
-      background: #111;
-      display: inline-block;
-    }
-    a {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 20px;
-      color: black;
-      background: #ffcc00;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 10px;
-      box-shadow: 2px 2px 10px black;
-    }
-    a:hover {
-      background: #ffd633;
-    }
-    footer {
-      margin-top: 50px;
-      font-size: 0.9rem;
-      color: #777;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>KnightsXBots™ — Watch Video</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#050507; --panel:#0e0f12; --gold:#ffcc00; --muted:#9aa0a6; --glass: rgba(255,255,255,0.03);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; font-family:"Cinzel", serif; background:
+    radial-gradient(800px 400px at 10% -10%, #111 0%, #050507 30%, #000 100%);
+    color:#eee; display:flex; align-items:center; justify-content:center; padding:28px;
+  }
+  .wrap{width:100%;max-width:1100px;}
+  .card{
+    background: linear-gradient(180deg, rgba(255,204,0,0.02), transparent), var(--panel);
+    border-radius:16px; padding:18px; border:1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 6px rgba(255,204,0,0.02) inset;
+  }
+  .top{
+    display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:12px;
+  }
+  .brand{display:flex; gap:12px; align-items:center}
+  .crest{width:64px;height:64px;border-radius:12px;background:radial-gradient(circle at 35% 30%, rgba(255,204,0,0.25), rgba(255,204,0,0.06)); display:grid;place-items:center;font-size:28px; color:#111; box-shadow: 0 8px 28px rgba(0,0,0,0.6);}
+  h1{margin:0;font-size:20px;color:var(--gold); letter-spacing:0.6px}
+  .sub{font-size:13px;color:var(--muted); margin-top:2px}
+  .meta{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap}
+  .chip{background:rgba(255,204,0,0.06); color:var(--gold); padding:6px 10px; border-radius:999px; font-size:12px; border:1px solid rgba(255,255,255,0.03)}
+  .player-wrap{margin-top:14px; position:relative; border-radius:12px; overflow:hidden; background:#000; border:1px solid rgba(255,255,255,0.03)}
+  .iframe{width:100%; height:640px; border:0; display:block}
+  .controls{display:flex; gap:10px; margin-top:12px}
+  .btn{
+    background:var(--gold); color:#000; border:0; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer;
+    box-shadow: 0 10px 26px rgba(255,204,0,0.18);
+  }
+  .btn.ghost{background:transparent;color:var(--muted); border:1px solid rgba(255,255,255,0.06); box-shadow:none}
+  .notes{margin-top:10px; color:var(--muted); font-size:13px}
+  .fallback{display:flex; gap:10px; margin-top:10px; flex-wrap:wrap}
+  .small{font-size:13px; color:var(--muted)}
+  @media (max-width:900px){
+    .iframe{height:56vw}
+  }
+</style>
 </head>
 <body>
-  <header>⚔️ KnightsXBots Portal ⚔️</header>
-  <div class="container">
-    <div class="video-card">
-      <h2>🎬 My Demon S01E01</h2>
-      <p>Language: Hindi 2.0 | Korean 2.0 | Subtitles: English</p>
-      <a href="https://streamtape.cc/v/YOlZOOxZ6pFvyRV/My.Demon.S01E01.720p.WEB-DL.Hindi.2.0-Korean.2.0.ESub.x264-HDHub4u.Tv.mkv" target="_blank">⚡ Watch / Download</a>
+  <div class="wrap">
+    <div class="card">
+      <div class="top">
+        <div class="brand">
+          <div class="crest">🛡️</div>
+          <div>
+            <h1>KnightsXBots™ Portal</h1>
+            <div class="sub">⚔️ Watch in-page — elegant, fast, knight-style</div>
+            <div class="meta" id="metaChips"></div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div id="userName" class="small">Welcome, Knight</div>
+          <div class="small">Powered by <b>KnightsXBots™</b></div>
+        </div>
+      </div>
+
+      <!-- Player -->
+      <div class="player-wrap" id="playerWrap">
+        <!-- iframe will be injected here -->
+        <iframe id="playerFrame" class="iframe" src="" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <a id="openBtn" class="btn" target="_blank" rel="noopener">⚡ Open in Player</a>
+        <a id="downloadBtn" class="btn ghost" target="_blank" rel="noopener">⬇️ Download</a>
+        <button id="copyBtn" class="btn ghost">Copy Link</button>
+        <button id="shareBtn" class="btn ghost">Share</button>
+        <button id="fsBtn" class="btn ghost">⤢ Fullscreen</button>
+      </div>
+
+      <div class="fallback" id="fallback"></div>
+      <div class="notes" id="notes">Note: If the video player fails to load, use "Open in Player" to open the source in a new tab.</div>
     </div>
   </div>
-  <footer>
-    ⚔️ Powered by <b>KnightsXBots</b> | 👑 Owner: @Nagi2308
-  </footer>
+
+<script>
+  // ====== EDIT THIS LINE ONLY ======
+  const VIDEO_URL = "https://streamtape.cc/v/YOlZOOxZ6pFvyRV/My.Demon.S01E01.720p.WEB-DL.Hindi.2.0-Korean.2.0.ESub.x264-HDHub4u.Tv.mkv";
+  // =================================
+
+  // helpers
+  const $ = id => document.getElementById(id);
+  const fileName = decodeURIComponent((VIDEO_URL.split("/").pop() || "video.mkv"));
+  const firstName = (window.Telegram?.WebApp?.initDataUnsafe?.user?.first_name) || "Knight";
+  $("userName").textContent = `Welcome, ${firstName}`;
+
+  // build simple chips
+  const chips = [];
+  const low = fileName.toLowerCase();
+  if (/\b(2160p|1440p|1080p|720p|480p)\b/.test(low)) chips.push(RegExp.$1.toUpperCase());
+  if (low.includes("web-dl")) chips.push("WEB-DL");
+  if (low.includes("x264")) chips.push("x264");
+  if (low.includes("hindi")) chips.push("Hindi");
+  if (low.includes("korean")) chips.push("Korean");
+  if (low.includes("esub")|| low.includes("sub")) chips.push("English Sub");
+
+  $("metaChips").innerHTML = chips.map(c => `<div class="chip">${c}</div>`).join(" ");
+
+  // Parse Streamtape ID: expecting URL like /v/ID/...
+  // fallback: if not recognized, we will just open original link.
+  let embedUrl = "";
+  try {
+    const u = new URL(VIDEO_URL);
+    // typical streamtape embed paths: /e/{id} or /v/{id}
+    const parts = u.pathname.split("/").filter(Boolean);
+    // find the 'v' or 'file' id token location
+    let id = "";
+    if (parts.length >= 2 && (parts[0]==="v" || parts[0]==="e")) {
+      id = parts[1];
+    } else {
+      // sometimes id is next to host: attempt to find first 16+ char token
+      id = parts.find(p => p.length >= 8) || "";
+    }
+    if (id) {
+      // streamtape embed path variant
+      embedUrl = `${u.protocol}//${u.hostname.replace("streamtape.cc","streamtape.cc").replace("streamtape.com","streamtape.com")}/e/${id}`;
+    } else {
+      embedUrl = VIDEO_URL;
+    }
+  } catch (err) {
+    embedUrl = VIDEO_URL;
+  }
+
+  // Set iframe src
+  const frame = $("playerFrame");
+  frame.src = embedUrl;
+
+  // Buttons
+  $("openBtn").href = embedUrl;
+  $("downloadBtn").href = VIDEO_URL;
+
+  $("copyBtn").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(VIDEO_URL); $("copyBtn").textContent = "Copied!"; setTimeout(()=> $("copyBtn").textContent = "Copy Link",1200);} catch(e){ $("copyBtn").textContent="Copy Failed"; }
+  });
+
+  $("shareBtn").addEventListener("click", async () => {
+    if (navigator.share) {
+      try { await navigator.share({title:fileName, text:`Watch on KnightsXBots: ${fileName}`, url: VIDEO_URL}); }
+      catch(e) { /* user canceled */ }
+    } else {
+      try { await navigator.clipboard.writeText(VIDEO_URL); $("shareBtn").textContent="Link Copied"; setTimeout(()=> $("shareBtn").textContent="Share",1200); } catch(e) {}
+    }
+  });
+
+  // fullscreen toggle (for iframe container)
+  $("fsBtn").addEventListener("click", () => {
+    const el = $("playerWrap");
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    else if (el.msRequestFullscreen) el.msRequestFullscreen();
+  });
+
+  // graceful fallback UI if embedding blocked
+  frame.addEventListener("load", () => {
+    // detect if embed blocked (simple heuristic: same origin frame contentWindow length might be inaccessible)
+    // If player does not render an expected content after a short delay, show fallback
+    setTimeout(()=> {
+      try {
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        const bodyText = (doc && doc.body && doc.body.innerText) ? doc.body.innerText.toLowerCase() : "";
+        // common signs of embed blocked
+        if (!doc || bodyText.includes("forbidden") || bodyText.includes("not allowed") || bodyText.length < 10) {
+          showFallback();
+        }
+      } catch(e) {
+        // cross-origin errors happen when embedding works fine; skip
+      }
+    }, 1200);
+  });
+
+  function showFallback(){
+    const f = $("fallback");
+    f.innerHTML = `
+      <div class="small">Embedding seems blocked for this source. Use the buttons below:</div>
+      <a class="btn" href="${embedUrl}" target="_blank" rel="noopener">Open Player (New tab)</a>
+      <a class="btn ghost" href="${VIDEO_URL}" target="_blank" rel="noopener">Open Original Link</a>
+      <a class="btn ghost" href="${VIDEO_URL}" download>Try Download</a>
+    `;
+  }
+
+  // set page title and small notes
+  document.title = `KnightsXBots — ${fileName}`;
+  const notes = $("notes");
+  notes.textContent = `File: ${fileName} • If embed fails, use "Open in Player".`;
+
+</script>
 </body>
 </html>
