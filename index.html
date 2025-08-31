@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KnightsXBots™ Portal ⚔️</title>
+  <!-- Telegram WebApp SDK (works inside Telegram) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: #0b0b0c;
+      --panel: #121214;
+      --gold: #ffcc00;
+      --text: #f2f2f2;
+      --muted: #b2b2b2;
+      --ring: rgba(255, 204, 0, 0.25);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Cinzel", ui-serif, Georgia, serif;
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 10% -10%, #1b1b1f 0%, #0b0b0c 40%, #000 100%);
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+    header {
+      padding: 18px 16px;
+      text-align: center;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--gold);
+      text-shadow: 0 2px 16px rgba(0,0,0,0.6);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .tm {
+      font-size: 12px;
+      vertical-align: super;
+      opacity: 0.8;
+    }
+    .wrap {
+      display: grid;
+      place-items: center;
+      padding: 22px 14px 32px;
+    }
+    .card {
+      width: 100%;
+      max-width: 680px;
+      background: linear-gradient(180deg, rgba(255, 204, 0, 0.06), rgba(255, 204, 0, 0.02)) , var(--panel);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.55), 0 0 0 2px var(--ring) inset;
+      position: relative;
+    }
+    .crest {
+      position: absolute;
+      right: 16px;
+      top: -16px;
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: radial-gradient(45px 45px at 50% 50%, rgba(255,204,0,0.35), rgba(255,204,0,0.05));
+      border: 1px solid rgba(255,255,255,0.07);
+      display: grid; place-items: center;
+      font-size: 28px;
+      filter: drop-shadow(0 6px 16px rgba(0,0,0,0.5));
+    }
+    h1 {
+      margin: 0 0 6px 0;
+      font-size: 22px;
+      letter-spacing: 0.3px;
+    }
+    .muted { color: var(--muted); font-size: 14px; }
+    .title {
+      margin: 16px 0 6px;
+      font-size: 16px;
+      word-break: break-word;
+    }
+    .meta {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 14px;
+    }
+    .chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,204,0,0.08);
+      color: var(--gold);
+      font-size: 12px;
+    }
+    .row { display: grid; gap: 10px; margin-top: 14px; }
+    .btn {
+      appearance: none; border: 0; cursor: pointer;
+      padding: 12px 14px; border-radius: 12px;
+      background: var(--gold); color: #000; font-weight: 800;
+      box-shadow: 0 10px 24px rgba(255,204,0,0.25);
+      text-decoration: none; text-align: center; font-size: 15px;
+    }
+    .btn.secondary {
+      background: transparent; color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: none;
+    }
+    .thanks { margin-top: 14px; font-size: 14px; }
+    footer {
+      text-align: center; color: var(--muted); font-size: 12px; padding: 16px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+  </style>
+</head>
+<body>
+  <header>⚔️ KnightsXBots<span class="tm">™</span> Portal</header>
+
+  <main class="wrap">
+    <section class="card">
+      <div class="crest">🛡️</div>
+
+      <h1>Welcome, <span id="userName">Knight</span>!</h1>
+      <div class="muted">Your enchanted scroll is ready.</div>
+
+      <div class="title" id="fileTitle">Loading title…</div>
+      <div class="meta" id="metaChips"></div>
+
+      <div class="row">
+        <a id="watchLink" class="btn" href="#" target="_blank" rel="noopener">⚡ Watch / Download</a>
+        <button id="copyBtn" class="btn secondary">Copy Link</button>
+        <button id="shareBtn" class="btn secondary">Share</button>
+      </div>
+
+      <div class="thanks" id="thanksText">Thanks for using KnightsXBots™!</div>
+    </section>
+  </main>
+
+  <footer>
+    ⚔️ Powered by <b>KnightsXBots™</b> • 👑 Owner: <a href="https://t.me/Nagi2308" target="_blank" rel="noopener" style="color:inherit"> @Nagi2308</a>
+  </footer>
+
+  <script>
+    // >>>>>> EDIT THIS ONE LINE WITH YOUR LINK <<<<<<
+    const VIDEO_URL = "https://streamtape.cc/v/YOlZOOxZ6pFvyRV/My.Demon.S01E01.720p.WEB-DL.Hindi.2.0-Korean.2.0.ESub.x264-HDHub4u.Tv.mkv";
+
+    // --- Telegram WebApp integration (safe fallback if opened in a normal browser)
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      try { tg.ready(); tg.expand(); } catch (e) {}
+      // Use Telegram theme text if needed:
+      document.body.style.backgroundColor = tg.backgroundColor || "";
+      document.body.style.color = tg.textColor || "";
+    }
+
+    // Basic helpers
+    const $ = (id) => document.getElementById(id);
+    const fileName = decodeURIComponent(VIDEO_URL.split("/").pop() || "video.mkv");
+
+    // Fill UI
+    $("watchLink").href = VIDEO_URL;
+    $("fileTitle").textContent = fileName;
+
+    // Thanks line with user’s first name (if opened inside Telegram)
+    const firstName = tg?.initDataUnsafe?.user?.first_name || "Knight";
+    $("userName").textContent = firstName;
+    $("thanksText").textContent = `✅ Thanks, ${firstName}! Enjoy: ${fileName}`;
+
+    // Try to extract simple tags from filename
+    const chips = [];
+    const lower = fileName.toLowerCase();
+    if (/\b(2160p|1440p|1080p|720p|480p)\b/.test(lower)) chips.push(RegExp.$1.toUpperCase());
+    if (lower.includes("web-dl")) chips.push("WEB-DL");
+    if (lower.includes("x264")) chips.push("x264");
+    if (lower.includes("hindi")) chips.push("Hindi");
+    if (lower.includes("korean")) chips.push("Korean");
+    if (lower.includes("esub") || lower.includes("sub")) chips.push("English Sub");
+    $("metaChips").innerHTML = chips.map(c => `<span class="chip">${c}</span>`).join("");
+
+    // Copy / Share actions (with gentle haptics if in Telegram)
+    const haptic = (type="impact") => {
+      try {
+        tg?.HapticFeedback?.impactOccurred?.(type);
+      } catch (e) {}
+    };
+
+    $("copyBtn").onclick = async () => {
+      try { await navigator.clipboard.writeText(VIDEO_URL); } catch (e) {}
+      haptic();
+      $("copyBtn").textContent = "Copied!";
+      setTimeout(() => ($("copyBtn").textContent = "Copy Link"), 1200);
+    };
+
+    $("shareBtn").onclick = async () => {
+      haptic();
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: fileName, text: "Video link from KnightsXBots™", url: VIDEO_URL });
+        } catch (e) {}
+      } else {
+        // Fallback: copy
+        try { await navigator.clipboard.writeText(VIDEO_URL); } catch (e) {}
+        $("shareBtn").textContent = "Link Copied";
+        setTimeout(() => ($("shareBtn").textContent = "Share"), 1200);
+      }
+    };
+  </script>
+</body>
+</html>
